@@ -3,13 +3,29 @@ import Task from "../task/task";
 import { formatDistance, subDays } from 'date-fns'
 import "./taskList.css"
 
-const  TaskList = () => {
+const  TaskList = ({items, onDelete, onToggleDone}) => {
+
+    const elements = items.map((item) => {
+        const {id, done, ...itemProps} = item;
+        let className = "";
+        if (done) {
+            className += " completed"
+        }
+
+        return (
+            <li className={className} key={id}>
+                <Task
+                    {...itemProps}
+                    onToggleDone={() => onToggleDone(id)}
+                    onDelete={() => onDelete(id)}/>
+            </li>
+            );
+    });
+
     return (
         <ul className="todo-list">
-            <li><Task description="Completed task" created="created 17 seconds ago"/></li>
-            <li><Task description="Active task" created={formatDistance(subDays(new Date(), 0), new Date(), { addSuffix: true }).toString()}/></li>
+            {elements}
         </ul>
-
     );
 }
 
