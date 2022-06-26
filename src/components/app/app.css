@@ -89,3 +89,15 @@ body {
     z-index: 2;
     border-top: 1px solid #e6e6e6;
 }
+
+.clear-completed,
+html .clear-completed:active {
+    position: relative;
+    line-height: 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.clear-completed:hover {
+    text-decoration: underline;
+}

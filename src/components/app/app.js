@@ -6,13 +6,33 @@ import "./app.css";
 
 export default class App extends Component {
 
-    id = 0;
+    indexId = 100;
 
     state = {
         items: [
-            {id: 1, label: "Completed task", created : "created 17 seconds ago", done: false},
-            {id: 2, label: "Active task", created : "created 67 seconds ago", done: false},
-        ]
+            {id: 1, label: "Completed task", created : "created 17 seconds ago", done: false, checked: false},
+            {id: 2, label: "Active task", created : "created 67 seconds ago", done: false, checked: false},
+        ],
+        filter: "all"
+    }
+
+
+    addItem = (text) => {
+        const newItem = {
+            id: this.indexId++,
+            label: text,
+            created: "1 sec ago",
+            done: false,
+            checked: false
+        }
+
+        this.setState(({items}) => {
+
+            const newArr = [...items, newItem]
+            return {
+                items: newArr
+            }
+        })
     }
 
     onDelete = (id) => {
@@ -31,6 +51,7 @@ export default class App extends Component {
             items.map((item) => {
                 if(item.id === id) {
                     item.done = !item.done;
+                    item.checked = !item.checked;
                 }
                 return result.push(item);
             })
@@ -41,21 +62,48 @@ export default class App extends Component {
         });
     }
 
+    onDeleteAllCompltetedTask = () => {
+
+        this.setState(({items}) => {
+            return {
+                items: items.filter((item) => item.done === false)
+            }
+        })
+    }
+
+    onFilterChange = (filter) => {
+        this.setState({filter});
+    }
+
+    filterItems = (items, filter) => {
+        if (filter === "all") {
+            return items;
+        } else if (filter === "active") {
+            return items.filter((item) => item.done === false);
+        } else if (filter === "completed") {
+            return items.filter((item) => item.done === true);
+        }
+    }
+
+
     render() {
 
-        const { items } = this.state;
+        const { items, filter } = this.state;
+        const itemLeftCount = items.filter((el) => el.done === false).length;
+        const invisibleItems = this.filterItems(items, filter);
+
         return (
             <div className="todoapp">
                 <div className="header">
                     <h1>todos</h1>
-                    <NewTaskForm/>
+                    <NewTaskForm addItem={this.addItem}/>
                 </div>
                 <div className="main">
                     <TaskList
-                        items={items}
+                        items={invisibleItems}
                         onDelete={this.onDelete}
                         onToggleDone={this.onToggleDone}/>
-                    <Footer/>
+                    <Footer filter={filter} itemLeftCount={itemLeftCount} onFilterChange={this.onFilterChange} onDeleteAllCompltetedTask={this.onDeleteAllCompltetedTask}/>
                 </div>
             </div>
         );

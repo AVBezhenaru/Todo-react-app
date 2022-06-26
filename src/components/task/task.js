@@ -1,11 +1,11 @@
 import React from "react";
 
-const Task = ({label, created, onDelete, onToggleDone}) => {
+const Task = ({label, created, onDelete, onToggleDone, checked}) => {
 
 
     return (
         <div className="view">
-            <input className="toggle" type="checkbox" onChange={onToggleDone}/>
+            <input className="toggle" type="checkbox" onChange={onToggleDone} checked={checked}/>
             <label>
                 <span className="description">{label}</span>
                 <span className="created">{created}</span>

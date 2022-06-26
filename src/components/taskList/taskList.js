@@ -9,7 +9,7 @@ const  TaskList = ({items, onDelete, onToggleDone}) => {
         const {id, done, ...itemProps} = item;
         let className = "";
         if (done) {
-            className += " completed"
+            className += "completed"
         }
 
         return (
