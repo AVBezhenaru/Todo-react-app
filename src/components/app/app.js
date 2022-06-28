@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import TaskList from "../taskList/taskList";
 import Footer from "../footer/footer";
 import NewTaskForm from "../newTaskForm/newTaskForm";
@@ -8,23 +8,26 @@ export default class App extends Component {
 
     indexId = 100;
 
+    create = (text) => {
+        return {
+            id: this.indexId++,
+            label: text,
+            created: new Date(),
+            done: false,
+            checked: false
+        };
+    }
+
     state = {
         items: [
-            {id: 1, label: "Completed task", created : "created 17 seconds ago", done: false, checked: false},
-            {id: 2, label: "Active task", created : "created 67 seconds ago", done: false, checked: false},
+            this.create("Completed task"),
+            this.create("Active task"),
         ],
         filter: "all"
     }
 
-
     addItem = (text) => {
-        const newItem = {
-            id: this.indexId++,
-            label: text,
-            created: "1 sec ago",
-            done: false,
-            checked: false
-        }
+        const newItem = this.create(text);
 
         this.setState(({items}) => {
 
@@ -90,7 +93,7 @@ export default class App extends Component {
 
         const { items, filter } = this.state;
         const itemLeftCount = items.filter((el) => el.done === false).length;
-        const invisibleItems = this.filterItems(items, filter);
+        const visibleItems = this.filterItems(items, filter);
 
         return (
             <div className="todoapp">
@@ -100,10 +103,10 @@ export default class App extends Component {
                 </div>
                 <div className="main">
                     <TaskList
-                        items={invisibleItems}
+                        items={visibleItems}
                         onDelete={this.onDelete}
                         onToggleDone={this.onToggleDone}/>
-                    <Footer filter={filter} itemLeftCount={itemLeftCount} onFilterChange={this.onFilterChange} onDeleteAllCompltetedTask={this.onDeleteAllCompltetedTask}/>
+                    <Footer filter={filter} itemLeftCount={itemLeftCount} onFilterChange={this.onFilterChange} onDeleteAllCompletedTask={this.onDeleteAllCompltetedTask}/>
                 </div>
             </div>
         );
