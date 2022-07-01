@@ -1,27 +1,33 @@
-import React from "react";
-import TaskFilter from "../taskFilter/taskFilter";
-import "./footer.css"
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const  Footer = ({itemLeftCount, filter, onFilterChange, onDeleteAllCompletedTask}) => {
+import TaskFilter from '../taskFilter/taskFilter';
 
-    Footer.defaultProps = {
-        itemLeftCount: 1,
-        filter: "all",
-        onFilterChange: () => {},
-        onDeleteAllCompletedTask: () => {},
-    }
+import './footer.css';
 
-    Footer.propTypes = {
-        itemLeftCount: PropTypes.number,
-        filter: PropTypes.string,
-        onDeleteAllCompletedTask: PropTypes.func,
-        onFilterChange: PropTypes.func,
-    }
+const Footer = ({ itemLeftCount, filter, onFilterChange, onDeleteAllCompletedTask }) => {
+  Footer.defaultProps = {
+    itemLeftCount: 1,
+    filter: 'all',
+    onFilterChange: () => {},
+    onDeleteAllCompletedTask: () => {},
+  };
 
-    return (
-        <TaskFilter itemLeftCount={itemLeftCount} filter={filter} onFilterChange={onFilterChange} onDeleteAllCompletedTask={onDeleteAllCompletedTask}/>
-    );
-}
+  Footer.propTypes = {
+    itemLeftCount: PropTypes.number,
+    filter: PropTypes.string,
+    onDeleteAllCompletedTask: PropTypes.func,
+    onFilterChange: PropTypes.func,
+  };
+
+  return (
+    <TaskFilter
+      itemLeftCount={itemLeftCount}
+      filter={filter}
+      onFilterChange={onFilterChange}
+      onDeleteAllCompletedTask={onDeleteAllCompletedTask}
+    />
+  );
+};
 
 export default Footer;
