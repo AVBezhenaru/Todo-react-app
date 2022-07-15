@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Task from '../task/task';
 import './taskList.css';
 
-const TaskList = ({ items, onDelete, onToggleDone }) => {
+const TaskList = ({ items, onDelete, onToggleDone, updateItemTimer }) => {
   TaskList.defaultProps = {
     items: [
       {
@@ -34,7 +34,13 @@ const TaskList = ({ items, onDelete, onToggleDone }) => {
 
     return (
       <li className={className} key={id}>
-        <Task {...itemProps} onToggleDone={() => onToggleDone(id)} onDelete={() => onDelete(id)} />
+        <Task
+          {...itemProps}
+          id={id}
+          onToggleDone={() => onToggleDone(id)}
+          onDelete={() => onDelete(id)}
+          updateItemTimer={updateItemTimer}
+        />
       </li>
     );
   });

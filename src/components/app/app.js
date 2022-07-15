@@ -16,6 +16,7 @@ export default class App extends Component {
       created: new Date(),
       done: false,
       checked: false,
+      timer: 0,
     };
   };
 
@@ -31,6 +32,22 @@ export default class App extends Component {
       const newArr = [...items, newItem];
       return {
         items: newArr,
+      };
+    });
+  };
+
+  updateItemTimer = (id, time) => {
+    this.setState(({ items }) => {
+      const result = [];
+      items.map((item) => {
+        if (item.id === id) {
+          item.timer = time;
+        }
+        return result.push(item);
+      });
+
+      return {
+        items: result,
       };
     });
   };
@@ -96,7 +113,12 @@ export default class App extends Component {
           <NewTaskForm addItem={this.addItem} />
         </div>
         <div className="main">
-          <TaskList items={visibleItems} onDelete={this.onDelete} onToggleDone={this.onToggleDone} />
+          <TaskList
+            items={visibleItems}
+            onDelete={this.onDelete}
+            onToggleDone={this.onToggleDone}
+            updateItemTimer={this.updateItemTimer}
+          />
           <Footer
             filter={filter}
             itemLeftCount={itemLeftCount}
