@@ -1,23 +1,22 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-// import './timer.css';
+import PropTypes from 'prop-types';
 
 export default class Timer extends Component {
-  // static defaultProps = {
-  //   label: 'name',
-  //   created: 'time',
-  //   checked: false,
-  //   onDelete: () => {},
-  //   onToggleDone: () => {},
-  // };
-  //
-  // static propTypes = {
-  //   label: PropTypes.string,
-  //   created: PropTypes.object,
-  //   checked: PropTypes.bool,
-  //   onDelete: PropTypes.func,
-  //   onToggleDone: PropTypes.func,
-  // };
+  static defaultProps = {
+    label: 'name',
+    created: 'time',
+    checked: false,
+    onDelete: () => {},
+    onToggleDone: () => {},
+  };
+
+  static propTypes = {
+    label: PropTypes.string,
+    created: PropTypes.object,
+    checked: PropTypes.bool,
+    onDelete: PropTypes.func,
+    onToggleDone: PropTypes.func,
+  };
 
   state = {
     time: this.props.timer,
