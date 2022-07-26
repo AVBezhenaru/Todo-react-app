@@ -1,30 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Task from '../task/task';
 import './taskList.css';
 
-const TaskList = ({ items, onDelete, onToggleDone }) => {
-  TaskList.defaultProps = {
-    items: [
-      {
-        id: 1,
-        label: 'text',
-        created: '1 sec ago',
-        done: false,
-        checked: false,
-      },
-    ],
-    onDelete: () => {},
-    onToggleDone: () => {},
-  };
-
-  TaskList.propTypes = {
-    items: PropTypes.array,
-    onDelete: PropTypes.func,
-    onToggleDone: PropTypes.func,
-  };
-
+const TaskList = ({ items, onDelete, onToggleDone, updateItemTimer }) => {
   const elements = items.map((item) => {
     const { id, done, ...itemProps } = item;
     let className = '';
@@ -34,7 +13,13 @@ const TaskList = ({ items, onDelete, onToggleDone }) => {
 
     return (
       <li className={className} key={id}>
-        <Task {...itemProps} onToggleDone={() => onToggleDone(id)} onDelete={() => onDelete(id)} />
+        <Task
+          {...itemProps}
+          id={id}
+          updateItemTimer={updateItemTimer}
+          onToggleDone={() => onToggleDone(id)}
+          onDelete={() => onDelete(id)}
+        />
       </li>
     );
   });

@@ -1,55 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-export default class Task extends Component {
-  static defaultProps = {
-    label: 'name',
-    created: 'time',
-    checked: false,
-    onDelete: () => {},
-    onToggleDone: () => {},
-  };
+import Timer from '../timer/timer';
 
-  static propTypes = {
-    label: PropTypes.string,
-    created: PropTypes.object,
-    checked: PropTypes.bool,
-    onDelete: PropTypes.func,
-    onToggleDone: PropTypes.func,
-  };
+const Task = (props) => {
+  const { label, checked, created, timer, id, onDelete, onToggleDone, updateItemTimer } = props;
 
-  state = {
-    time: formatDistanceToNow(this.props.created, { addSuffix: true, includeSeconds: true }),
-  };
+  const [time, setTime] = useState(formatDistanceToNow(created, { addSuffix: true, includeSeconds: true }));
 
-  timeUpdate = () => {
-    this.setState(() => {
-      return {
-        time: formatDistanceToNow(this.props.created, { addSuffix: true, includeSeconds: true }),
-      };
-    });
-  };
-
-  componentDidMount() {
-    setInterval(() => {
-      this.timeUpdate();
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(formatDistanceToNow(created, { addSuffix: true, includeSeconds: true }));
     }, 5000);
-  }
 
-  render() {
-    const { label, checked, onDelete, onToggleDone } = this.props;
+    return () => clearInterval(interval);
+  }, [time]);
 
-    return (
-      <div className="view">
-        <input className="toggle" type="checkbox" onChange={onToggleDone} checked={checked} />
-        <label>
-          <span className="description">{label}</span>
-          <span className="created">created {this.state.time}</span>
-        </label>
-        <button className="icon icon-edit" />
-        <button className="icon icon-destroy" onClick={onDelete} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="view">
+      <input className="toggle" type="checkbox" onChange={onToggleDone} checked={checked} />
+      <label>
+        <span className="title">{label}</span>
+        <Timer timer={timer} id={id} updateItemTimer={updateItemTimer} />
+        <span className="created description">created {time}</span>
+      </label>
+      <button className="icon icon-edit" />
+      <button className="icon icon-destroy" onClick={onDelete} />
+    </div>
+  );
+};
+
+export default Task;

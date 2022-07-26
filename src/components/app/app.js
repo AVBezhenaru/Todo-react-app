@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import TaskList from '../taskList/taskList';
 import Footer from '../footer/footer';
@@ -6,75 +6,71 @@ import NewTaskForm from '../newTaskForm/newTaskForm';
 
 import './app.css';
 
-export default class App extends Component {
-  indexId = 100;
+const App = () => {
+  let [indexId, setIndexId] = useState(100);
+  const [filter, setFilter] = useState('all');
 
-  create = (text) => {
+  const create = (text) => {
     return {
-      id: this.indexId++,
+      id: indexId++,
       label: text,
       created: new Date(),
       done: false,
       checked: false,
+      timer: 0,
     };
   };
 
-  state = {
-    items: [this.create('Completed task'), this.create('Active task')],
-    filter: 'all',
+  const [items, setItems] = useState([create('Completed task'), create('Active task')]);
+
+  const addItem = (text) => {
+    setIndexId((indexId) => indexId + 1);
+    const newItem = create(text);
+
+    setItems([...items, newItem]);
   };
 
-  addItem = (text) => {
-    const newItem = this.create(text);
+  const onDelete = (id) => {
+    const index = items.findIndex((el) => el.id === id);
+    const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
 
-    this.setState(({ items }) => {
-      const newArr = [...items, newItem];
-      return {
-        items: newArr,
-      };
+    setItems(newArr);
+  };
+
+  const updateItemTimer = (time, id) => {
+    const result = [];
+    items.map((item) => {
+      if (item.id === id) {
+        item.timer = time;
+      }
+      result.push(item);
     });
+
+    setItems(result);
   };
 
-  onDelete = (id) => {
-    this.setState(({ items }) => {
-      const index = items.findIndex((el) => el.id === id);
-      const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
-      return {
-        items: newArr,
-      };
+  const onToggleDone = (id) => {
+    const result = [];
+    items.map((item) => {
+      if (item.id === id) {
+        item.done = !item.done;
+        item.checked = !item.checked;
+      }
+      return result.push(item);
     });
+
+    setItems(result);
   };
 
-  onToggleDone = (id) => {
-    this.setState(({ items }) => {
-      const result = [];
-      items.map((item) => {
-        if (item.id === id) {
-          item.done = !item.done;
-          item.checked = !item.checked;
-        }
-        return result.push(item);
-      });
-
-      return {
-        items: result,
-      };
-    });
+  const onDeleteAllCompltetedTask = () => {
+    setItems(items.filter((item) => item.done === false));
   };
 
-  onDeleteAllCompltetedTask = () => {
-    this.setState(({ items }) => {
-      return {
-        items: items.filter((item) => item.done === false),
-      };
-    });
+  const onFilterChange = (filter) => {
+    setFilter(filter);
   };
 
-  onFilterChange = (filter) => {
-    this.setState({ filter });
-  };
-
-  filterItems = (items, filter) => {
+  const filterItems = (items, filter) => {
     if (filter === 'all') {
       return items;
     } else if (filter === 'active') {
@@ -84,27 +80,31 @@ export default class App extends Component {
     }
   };
 
-  render() {
-    const { items, filter } = this.state;
-    const itemLeftCount = items.filter((el) => el.done === false).length;
-    const visibleItems = this.filterItems(items, filter);
+  const itemLeftCount = items.filter((el) => el.done === false).length;
+  const visibleItems = filterItems(items, filter);
 
-    return (
-      <div className="todoapp">
-        <div className="header">
-          <h1>todos</h1>
-          <NewTaskForm addItem={this.addItem} />
-        </div>
-        <div className="main">
-          <TaskList items={visibleItems} onDelete={this.onDelete} onToggleDone={this.onToggleDone} />
-          <Footer
-            filter={filter}
-            itemLeftCount={itemLeftCount}
-            onFilterChange={this.onFilterChange}
-            onDeleteAllCompletedTask={this.onDeleteAllCompltetedTask}
-          />
-        </div>
+  return (
+    <div className="todoapp">
+      <div className="header">
+        <h1>todos</h1>
+        <NewTaskForm addItem={addItem} />
       </div>
-    );
-  }
-}
+      <div className="main">
+        <TaskList
+          items={visibleItems}
+          onDelete={onDelete}
+          onToggleDone={onToggleDone}
+          updateItemTimer={updateItemTimer}
+        />
+        <Footer
+          filter={filter}
+          itemLeftCount={itemLeftCount}
+          onFilterChange={onFilterChange}
+          onDeleteAllCompletedTask={onDeleteAllCompltetedTask}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default App;
