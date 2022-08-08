@@ -39,6 +39,7 @@ const App = () => {
 
   const updateItemTimer = (time, id) => {
     const result = [];
+
     items.map((item) => {
       if (item.id === id) {
         item.timer = time;
