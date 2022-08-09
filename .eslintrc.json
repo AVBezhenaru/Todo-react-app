@@ -20,6 +20,8 @@
   },
   "plugins": ["react", "prettier", "import"],
   "rules": {
+    "switch-colon-spacing": "off",
+    "default-case": "off",
     "indent": ["error", 2],
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],

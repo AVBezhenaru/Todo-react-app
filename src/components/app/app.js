@@ -10,22 +10,22 @@ const App = () => {
   let [indexId, setIndexId] = useState(100);
   const [filter, setFilter] = useState('all');
 
-  const create = (text) => {
+  const create = (text, time = 120) => {
     return {
       id: indexId++,
       label: text,
       created: new Date(),
       done: false,
       checked: false,
-      timer: 0,
+      time: time,
     };
   };
 
   const [items, setItems] = useState([create('Completed task'), create('Active task')]);
 
-  const addItem = (text) => {
+  const addItem = (text, time) => {
     setIndexId((indexId) => indexId + 1);
-    const newItem = create(text);
+    const newItem = create(text, time);
 
     setItems([...items, newItem]);
   };
@@ -42,7 +42,7 @@ const App = () => {
 
     items.map((item) => {
       if (item.id === id) {
-        item.timer = time;
+        item.time = time;
       }
       result.push(item);
     });
