@@ -17,7 +17,7 @@ const App = () => {
       created: new Date(),
       done: false,
       checked: false,
-      time: time,
+      time: time === '0' ? 120 : time,
     };
   };
 
@@ -35,6 +35,18 @@ const App = () => {
     const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
 
     setItems(newArr);
+  };
+
+  const onEdit = (newLabel, id) => {
+    const result = [];
+    items.map((item) => {
+      if (item.id === id) {
+        item.label = newLabel;
+      }
+      result.push(item);
+    });
+
+    setItems(result);
   };
 
   const updateItemTimer = (time, id) => {
@@ -96,6 +108,7 @@ const App = () => {
           onDelete={onDelete}
           onToggleDone={onToggleDone}
           updateItemTimer={updateItemTimer}
+          onEdit={onEdit}
         />
         <Footer
           filter={filter}

@@ -67,13 +67,3 @@ const NewTaskForm = (props) => {
 };
 
 export default NewTaskForm;
-
-//
-// <input
-//   className="new-todo"
-//   value={value}
-//   onChange={handleChange}
-//   onKeyPress={handleKeyPress}
-//   placeholder="What needs to be done?"
-//   autoFocus
-// />

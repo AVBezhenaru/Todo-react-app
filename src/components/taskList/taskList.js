@@ -3,7 +3,7 @@ import React from 'react';
 import Task from '../task/task';
 import './taskList.css';
 
-const TaskList = ({ items, onDelete, onToggleDone, updateItemTimer }) => {
+const TaskList = ({ items, onDelete, onToggleDone, updateItemTimer, onEdit }) => {
   const elements = items.map((item) => {
     const { id, done, ...itemProps } = item;
     let className = '';
@@ -19,6 +19,7 @@ const TaskList = ({ items, onDelete, onToggleDone, updateItemTimer }) => {
           updateItemTimer={updateItemTimer}
           onToggleDone={() => onToggleDone(id)}
           onDelete={() => onDelete(id)}
+          onEdit={onEdit}
         />
       </li>
     );
