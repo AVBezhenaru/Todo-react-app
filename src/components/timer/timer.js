@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Timer = (props) => {
-  let { time, id, updateItemTimer } = props;
+  let { time, id, updateItemTimer, timerIsActive } = props;
   const [isActive, setIsActive] = useState(false);
 
   const handleStart = () => {
@@ -14,7 +14,7 @@ const Timer = (props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      isActive && updateItemTimer(time < 1 ? 0 : (time = time - 1), id);
+      isActive && timerIsActive && updateItemTimer(time < 1 ? 0 : (time = time - 1), id);
       if (time < 1) {
         setIsActive(false);
       }
@@ -23,7 +23,7 @@ const Timer = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [isActive]);
+  }, [isActive, timerIsActive]);
 
   const m = Math.floor(time / 60)
     .toString()

@@ -45,6 +45,7 @@ const NewTaskForm = (props) => {
         name="min"
         type="number"
         min="0"
+        max="60"
         className="new-todo-form__timer"
         placeholder="Min"
         value={min}
@@ -55,6 +56,7 @@ const NewTaskForm = (props) => {
         name="sec"
         type="number"
         min="0"
+        max="60"
         className="new-todo-form__timer"
         placeholder="Sec"
         value={sec}

@@ -17,6 +17,7 @@ const App = () => {
       created: new Date(),
       done: false,
       checked: false,
+      timerIsActive: true,
       time: time === '0' ? 120 : time,
     };
   };
@@ -32,7 +33,11 @@ const App = () => {
 
   const onDelete = (id) => {
     const index = items.findIndex((el) => el.id === id);
-    const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
+    // const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
+    console.log(index);
+    const newArr = [...items];
+    newArr.splice(index, 1);
+    // const newArr = [...items.splice(index, 1)];
 
     setItems(newArr);
   };
@@ -50,16 +55,17 @@ const App = () => {
   };
 
   const updateItemTimer = (time, id) => {
-    const result = [];
-
-    items.map((item) => {
-      if (item.id === id) {
-        item.time = time;
-      }
-      result.push(item);
+    setItems((state) => {
+      const result = [];
+      state.map((item) => {
+        if (item.id === id) {
+          item.time = time;
+          item.timerIsActive = true;
+        }
+        result.push(item);
+      });
+      return result;
     });
-
-    setItems(result);
   };
 
   const onToggleDone = (id) => {
@@ -67,6 +73,7 @@ const App = () => {
     items.map((item) => {
       if (item.id === id) {
         item.done = !item.done;
+        item.timerIsActive = !item.timerIsActive;
         item.checked = !item.checked;
       }
       return result.push(item);
