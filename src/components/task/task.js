@@ -44,16 +44,6 @@ export default class Task extends Component {
     const { timeToCreate, isActiveEdit } = this.state;
 
     return (
-      // <div className="view">
-      //   <input className="toggle" type="checkbox" onChange={onToggleDone} checked={checked} />
-      //   <label>
-      //     <span className="title">{label}</span>
-      //     <Timer timer={timer} id={id} updateItemTimer={updateItemTimer} timerIsActive={timerIsActive} />
-      //     <span className="created description">created {time}</span>
-      //   </label>
-      //   <button className="icon icon-edit" />
-      //   <button className="icon icon-destroy" onClick={onDelete} />
-      // </div>
       <>
         <div>
           {isActiveEdit ? (
