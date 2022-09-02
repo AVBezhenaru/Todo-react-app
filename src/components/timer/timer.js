@@ -1,56 +1,51 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 export default class Timer extends Component {
-  static defaultProps = {
-    label: 'name',
-    created: 'time',
-    checked: false,
-    onDelete: () => {},
-    onToggleDone: () => {},
-  };
-
-  static propTypes = {
-    label: PropTypes.string,
-    created: PropTypes.object,
-    checked: PropTypes.bool,
-    onDelete: PropTypes.func,
-    onToggleDone: PropTypes.func,
-  };
-
   state = {
     time: this.props.timer,
-    isActive: false,
+    isActive: this.props.timerIsActive,
+    intervalId: null,
   };
 
   componentDidMount() {
     this.setState({ time: this.props.timer });
+    this.setState({ isActive: this.props.timerIsActive });
+    this.state.isActive && this.setState({ intervalId: setInterval(this.timer, 1000) });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.timerIsActive !== this.props.timerIsActive) {
+      if (this.props.timerIsActive) {
+        clearInterval(this.state.intervalId);
+        this.handleStart();
+      } else {
+        this.handleStop();
+      }
+    }
   }
 
   timer = () => {
     if (this.state.isActive) {
       let count = this.state.time;
-      count++;
-      this.setState({ time: count });
-      this.props.updateItemTimer(this.props.id, this.state.time);
+      count--;
+      this.setState({ time: count < 1 ? 0 : count });
+      this.props.updateItemTimer(this.props.id, this.state.time, this.state.isActive);
     }
   };
 
-  interval = setInterval(this.timer, 1000);
-
   handleStart = () => {
-    this.setState(() => {
-      return { isActive: true };
-    });
-    this.interval;
+    this.setState({ isActive: true });
+    this.setState({ intervalId: setInterval(this.timer, 1000) });
   };
 
   handleStop = () => {
     this.setState({ isActive: false });
+    this.props.updateItemTimer(this.props.id, this.state.time, false);
+    clearInterval(this.state.intervalId);
   };
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.state.intervalId);
   }
 
   render() {

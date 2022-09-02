@@ -9,14 +9,15 @@ import './app.css';
 export default class App extends Component {
   indexId = 100;
 
-  create = (text) => {
+  create = (text, time = '120') => {
     return {
       id: this.indexId++,
       label: text,
       created: new Date(),
       done: false,
       checked: false,
-      timer: 0,
+      timerIsActive: false,
+      timer: time === '0' ? 120 : time,
     };
   };
 
@@ -25,8 +26,8 @@ export default class App extends Component {
     filter: 'all',
   };
 
-  addItem = (text) => {
-    const newItem = this.create(text);
+  addItem = (text, time) => {
+    const newItem = this.create(text, time);
 
     this.setState(({ items }) => {
       const newArr = [...items, newItem];
@@ -36,12 +37,13 @@ export default class App extends Component {
     });
   };
 
-  updateItemTimer = (id, time) => {
+  updateItemTimer = (id, time, timerActive) => {
     this.setState(({ items }) => {
       const result = [];
       items.map((item) => {
         if (item.id === id) {
           item.timer = time;
+          item.timerIsActive = timerActive;
         }
         return result.push(item);
       });
@@ -54,10 +56,25 @@ export default class App extends Component {
 
   onDelete = (id) => {
     this.setState(({ items }) => {
-      const index = items.findIndex((el) => el.id === id);
-      const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
+      const newArr = items.filter((el) => el.id !== id);
       return {
         items: newArr,
+      };
+    });
+  };
+
+  onEdit = (newLabel, id) => {
+    this.setState(({ items }) => {
+      const result = [];
+      items.map((item) => {
+        if (item.id === id) {
+          item.label = newLabel;
+        }
+        result.push(item);
+      });
+
+      return {
+        items: result,
       };
     });
   };
@@ -65,10 +82,16 @@ export default class App extends Component {
   onToggleDone = (id) => {
     this.setState(({ items }) => {
       const result = [];
+      /* eslint-disable */
       items.map((item) => {
         if (item.id === id) {
           item.done = !item.done;
           item.checked = !item.checked;
+          item.done
+            ? (item.timerIsActive = false)
+            : item.timerIsActive
+            ? (item.timerIsActive = true)
+            : (item.timerIsActive = false);
         }
         return result.push(item);
       });
@@ -118,6 +141,7 @@ export default class App extends Component {
             onDelete={this.onDelete}
             onToggleDone={this.onToggleDone}
             updateItemTimer={this.updateItemTimer}
+            onEdit={this.onEdit}
           />
           <Footer
             filter={filter}
