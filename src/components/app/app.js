@@ -17,7 +17,7 @@ const App = () => {
       created: new Date(),
       done: false,
       checked: false,
-      timerIsActive: true,
+      timerIsActive: false,
       time: time === '0' ? 120 : time,
     };
   };
@@ -32,12 +32,7 @@ const App = () => {
   };
 
   const onDelete = (id) => {
-    const index = items.findIndex((el) => el.id === id);
-    // const newArr = [...items.splice(0, index), ...items.splice(index + 1)];
-    console.log(index);
-    const newArr = [...items];
-    newArr.splice(index, 1);
-    // const newArr = [...items.splice(index, 1)];
+    const newArr = items.filter((item) => item.id !== id);
 
     setItems(newArr);
   };
@@ -54,13 +49,17 @@ const App = () => {
     setItems(result);
   };
 
-  const updateItemTimer = (time, id) => {
+  const updateItemTimer = (time, id, setTimeActive) => {
     setItems((state) => {
       const result = [];
       state.map((item) => {
         if (item.id === id) {
           item.time = time;
-          item.timerIsActive = true;
+          if (item.done === true) {
+            item.timerIsActive = false;
+          } else {
+            item.timerIsActive = setTimeActive;
+          }
         }
         result.push(item);
       });
@@ -69,17 +68,18 @@ const App = () => {
   };
 
   const onToggleDone = (id) => {
-    const result = [];
-    items.map((item) => {
-      if (item.id === id) {
-        item.done = !item.done;
-        item.timerIsActive = !item.timerIsActive;
-        item.checked = !item.checked;
-      }
-      return result.push(item);
+    setItems((state) => {
+      const result = [];
+      state.map((item) => {
+        if (item.id === id) {
+          item.done = !item.done;
+          item.done ? (item.timerIsActive = false) : (item.timerIsActive = true);
+          item.checked = !item.checked;
+        }
+        result.push(item);
+      });
+      return result;
     });
-
-    setItems(result);
   };
 
   const onDeleteAllCompltetedTask = () => {
